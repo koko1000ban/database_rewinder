@@ -87,8 +87,8 @@ module DatabaseRewinder
 
     # cache AR connection.tables
     def all_table_names(connection)
-      db = connection.pool.spec.config[:database]
-      @table_names_cache[db] ||= connection.tables.reject{|t| t == ActiveRecord::Migrator.schema_migrations_table_name }
+      db, adapter_name = connection.pool.spec.config.values_at(:database, :adapter)
+      @table_names_cache["#{adapter_name}_#{db}"] ||= connection.tables.reject{|t| t == ActiveRecord::Migrator.schema_migrations_table_name }
     end
   end
 end
